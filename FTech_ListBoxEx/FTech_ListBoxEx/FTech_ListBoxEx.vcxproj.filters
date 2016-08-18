@@ -45,6 +45,9 @@
     <ClInclude Include="ListBoxEx.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="ScrollBarEx.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FTech_ListBoxEx.cpp">
@@ -57,6 +60,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ListBoxEx.cpp">
+      <Filter>include</Filter>
+    </ClCompile>
+    <ClCompile Include="ScrollBarEx.cpp">
       <Filter>include</Filter>
     </ClCompile>
   </ItemGroup>

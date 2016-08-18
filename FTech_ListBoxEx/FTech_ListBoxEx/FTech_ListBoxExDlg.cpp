@@ -65,12 +65,15 @@ BOOL CFTech_ListBoxExDlg::OnInitDialog()
 	m_lbTest.SetCurSel(0);
 
 	m_plbTest = new CListBoxEx();
-	m_plbTest->CreateContol(this,CRect(10,200,300,300),2020);
+	m_plbTest->CreateContol(this,CRect(10,200,300,300),1001);
 	m_plbTest->SetAlignTextCM();
 	m_plbTest->SetColorBkg(255,128,128,128);
 	m_plbTest->SetColorItemHot(255,128,0,0);
 	m_plbTest->SetColorItemNomal(255,128,128,128,255,64,64,64);
 	m_plbTest->SetColorTextHot(255,0,255,0);
+	m_plbTest->SetSBColorChannel(255,128,0,128);
+	m_plbTest->SetSBColorArrow(255,255,255,255,255,128,0,128);
+	m_plbTest->SetItemHeight(25);
 	m_plbTest->AddString(L"RED");
 	m_plbTest->AddString(L"Second");
 	m_plbTest->AddString(L"Third");

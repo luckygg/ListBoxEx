@@ -9,34 +9,45 @@
 
 IMPLEMENT_DYNAMIC(CListBoxEx, CListBox)
 
-CListBoxEx::CListBoxEx()
+	CListBoxEx::CListBoxEx()
 {
 	m_bModeOneColor = true;
-	m_nTextAlign1 = 0;
-	m_nTextAlign2 = 0;
-	m_nOffsetTextX = 0;
-	m_nOffsetTextY = 0;
-	m_fSizeText = 20;
-	m_fSizeBorder = 1;
 
-	m_nItemHeight = 35;
-	m_clrBkg = Color(255,128,0,0);
-	m_clrBorder = Color(255,255,0,0);
-	m_clrItemNom1 = Color(255,128,128,128);
-	m_clrItemNom2 = Color(255, 64, 64, 64);
-	m_clrItemHot = Color(255,128,0,0);
-	m_clrTextNom = Color(255,255,255,255);
-	m_clrTextHot = Color(255,255,255,255);
+	m_nTextAlign1	= 0;
+	m_nTextAlign2	= 0;
+	m_nOffsetTextX	= 0;
+	m_nOffsetTextY	= 0;
+	m_fSizeText		= 20;
+	m_fSizeBorder	= 1;
+	m_nItemHeight	= 35;
+
+	m_clrBkg		= Color(255,128,0,0);
+	m_clrBorder		= Color(255,255,0,0);
+	m_clrItemNom1	= Color(255,128,128,128);
+	m_clrItemNom2	= Color(255, 64, 64, 64);
+	m_clrItemHot	= Color(255,128,0,0);
+	m_clrTextNom	= Color(255,255,255,255);
+	m_clrTextHot	= Color(255,255,255,255);
+
+	m_rcSBV			= CRect(0,0,0,0);
+	m_pwndSBV		= NULL;
 }
 
 CListBoxEx::~CListBoxEx()
 {
-	
+	if (m_pwndSBV != NULL)
+	{
+		m_pwndSBV->DestroyWindow();
+		delete m_pwndSBV;
+		m_pwndSBV = NULL;
+	}
 }
 
 BEGIN_MESSAGE_MAP(CListBoxEx, CListBox)
 	ON_WM_MOUSEWHEEL()
 	ON_WM_ERASEBKGND()
+	ON_WM_SIZE()
+	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 // CListBoxEx message handlers
@@ -45,7 +56,17 @@ BOOL CListBoxEx::CreateContol(CWnd* pWnd, CRect rcSize, UINT ID)
 {
 	if (pWnd == NULL) return false;
 
-	return Create(WS_CHILD|WS_VISIBLE|WS_TABSTOP|WS_VSCROLL|LBS_OWNERDRAWVARIABLE|LBS_HASSTRINGS, rcSize, pWnd, ID );
+	// style에서 'WS_VSCROLL'을 사용안한다.
+	//BOOL ret = Create(WS_CHILD|WS_VISIBLE|WS_TABSTOP|WS_VSCROLL|LBS_OWNERDRAWVARIABLE|LBS_HASSTRINGS|LBS_NOTIFY, rcSize, pWnd, ID );
+	BOOL ret = Create(WS_CHILD|WS_VISIBLE|WS_TABSTOP|LBS_OWNERDRAWVARIABLE|LBS_HASSTRINGS|LBS_NOTIFY, rcSize, pWnd, ID );
+
+	m_rcSBV = CRect(rcSize.Width()-20,0,rcSize.Width(),rcSize.Height());
+	//m_rcSBV = CRect(rcSize.right-31,0,rcSize.right-11,rcSize.Height());
+
+	m_pwndSBV = new CScrollBarEx();
+	m_pwndSBV->CreateContol(this,false,m_rcSBV,WM_USER);
+
+	return ret;
 }
 
 BOOL CListBoxEx::InitControl(CWnd* pWnd)
@@ -60,27 +81,50 @@ BOOL CListBoxEx::InitControl(CWnd* pWnd)
 	BOOL ret = DestroyWindow();
 	if (ret == FALSE) return false;
 
-	return Create(WS_CHILD|WS_VISIBLE|WS_TABSTOP|WS_VSCROLL|LBS_OWNERDRAWVARIABLE|LBS_HASSTRINGS, rect, pWnd, id );
+	//ret = Create(WS_CHILD|WS_VISIBLE|WS_TABSTOP|WS_VSCROLL|LBS_OWNERDRAWVARIABLE|LBS_HASSTRINGS, rect, pWnd, id );
+	ret = Create(WS_CHILD|WS_VISIBLE|WS_TABSTOP|LBS_OWNERDRAWVARIABLE|LBS_HASSTRINGS, rect, pWnd, id );
+
+	m_rcSBV = CRect(rect.Width()-20,0,rect.Width(),rect.Height());
+	//m_rcSBV = CRect(rect.right-31,0,rect.right-11,rect.Height());
+
+	m_pwndSBV = new CScrollBarEx();
+	m_pwndSBV->CreateContol(this,false,m_rcSBV,WM_USER);
+
+	return ret;
 }
 
 int CListBoxEx::AddString(CString strItem)
 {
-	return ((CListBox*)this)->AddString(strItem);
-}
+	int cntItem = ((CListBox*)this)->AddString(strItem);	// 현재 아이템 개수.
+	int numShow = m_rcSBV.Height() / m_nItemHeight;			// 한 화면에 보여지는 아이템 개수.
+	if (cntItem > numShow)
+	{
+		m_pwndSBV->ShowWindow(SW_SHOW);
+		m_pwndSBV->SetScrollRange(0,cntItem-numShow);		// 스크롤바의 범위를 지정.
+	}
+	else
+		m_pwndSBV->ShowWindow(SW_HIDE);
 
-int CListBoxEx::InsertString(int nIndex, CString strItem)
-{
-	return ((CListBox*)this)->InsertString(nIndex, strItem);
+	m_pwndSBV->SetScrollPos(0);
+	return cntItem;
 }
 
 void CListBoxEx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct) 
 {
+	m_pwndSBV->MoveWindow(m_rcSBV);
+
 	if ((int)lpDrawItemStruct->itemID < 0)
 		return; 
 
 	CString text;
 	GetText(lpDrawItemStruct->itemID, text);
 	CRect rect = lpDrawItemStruct->rcItem;
+
+	int cntItem = GetCount();
+	int numShow = m_rcSBV.Height() / m_nItemHeight;
+	// 스크롤바가 생성되면 List Box의 드로우 영역을 줄인다.
+	if (cntItem > numShow)
+		rect.right -= 20;
 
 	CDC* pDC = CDC::FromHandle(lpDrawItemStruct->hDC);
 	Graphics mainG (lpDrawItemStruct->hDC);
@@ -125,6 +169,7 @@ void CListBoxEx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 		}
 		DrawText(&mainG,rect,text,clrText);
 	}
+
 }
 
 void CListBoxEx::MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct)
@@ -156,16 +201,22 @@ void CListBoxEx::DrawText(Graphics *pG, CRect rcItem, CString strText, Color clr
 	formatAlign.SetLineAlignment((Gdiplus::StringAlignment)m_nTextAlign2);	// Top / Middle / Bottom
 
 	SolidBrush brs(clrText);
-	RectF rcfCaption((float)rcItem.left+m_nOffsetTextX, (float)rcItem.top+m_nOffsetTextY, (float)rcItem.Width(),(float)rcItem.Height());
+	RectF rcfCaption((float)rcItem.left+m_nOffsetTextX, (float)rcItem.top+m_nOffsetTextY, (float)rcItem.Width()-20,(float)rcItem.Height());
 	pG->DrawString(strText,strText.GetLength(),&font,rcfCaption,&formatAlign,&brs);
 }
 
 BOOL CListBoxEx::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
 	if(zDelta > 0)
+	{
 		SetTopIndex(GetTopIndex()-1);
+		m_pwndSBV->SetScrollPos(GetTopIndex()-1);
+	}
 	else
+	{
 		SetTopIndex(GetTopIndex()+1);
+		m_pwndSBV->SetScrollPos(GetTopIndex()+1);
+	}
 
 	return CListBox::OnMouseWheel(nFlags, zDelta, pt);
 }
@@ -182,3 +233,42 @@ BOOL CListBoxEx::OnEraseBkgnd(CDC* pDC)
 	return TRUE;
 }
 
+
+void CListBoxEx::OnSize(UINT nType, int cx, int cy)
+{
+	CListBox::OnSize(nType, cx, cy);
+
+	// List Box의 세로길이가 변경되면 스크롤바를 제거 후 재 생성한다.
+	// MoveWindow 호출 시 크기 적용이 안되어 윈도우를 재 생성해서 해결 함. 
+	if (m_pwndSBV == NULL) return;
+
+	m_pwndSBV->DestroyWindow();
+	delete m_pwndSBV;
+	m_pwndSBV = NULL;
+
+	m_rcSBV.bottom = cy;
+	m_pwndSBV = new CScrollBarEx();
+	m_pwndSBV->CreateContol(this,false,m_rcSBV,1000);
+
+	int cntItem = GetCount();
+	int numShow = m_rcSBV.Height() / m_nItemHeight;
+	if (cntItem > numShow)
+	{
+		m_pwndSBV->ShowWindow(SW_SHOW);
+		m_pwndSBV->SetScrollRange(0,cntItem-numShow);
+	}
+	else
+		m_pwndSBV->ShowWindow(SW_HIDE);
+}
+
+void CListBoxEx::OnDestroy()
+{
+	CListBox::OnDestroy();
+
+	if (m_pwndSBV != NULL)
+	{
+		m_pwndSBV->DestroyWindow();
+		delete m_pwndSBV;
+		m_pwndSBV = NULL;
+	}
+}

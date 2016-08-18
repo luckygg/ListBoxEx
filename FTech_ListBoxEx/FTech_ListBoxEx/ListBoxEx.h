@@ -6,6 +6,7 @@
 // Programmed by William Kim
 //----------------------------------------------------------
 
+#include "ScrollBarEx.h"
 // CListBoxEx
 
 class CListBoxEx : public CListBox
@@ -17,6 +18,7 @@ public:
 	virtual ~CListBoxEx();
 
 public :
+
 	//----- Dynamic Create Control -----//
 	BOOL CreateContol(CWnd* pWnd, CRect rcSize, UINT ID);
 
@@ -25,13 +27,12 @@ public :
 
 	//----- Add Item -----//
 	int AddString(CString strItem);										
-	int InsertString(int nIndex, CString strItem);
-	
+
 	//----- Set Size -----//
 	void SetSizeText	(float fSize) { m_fSizeText		= fSize; }
 	void SetSizeBorder	(float fSize) { m_fSizeBorder	= fSize; }
 	void SetItemHeight(int nHeight) { m_nItemHeight = nHeight; Invalidate(); }
-	
+
 	//----- Set Color -----//
 	void SetColorBkg		(int nA, int nR, int nG, int nB) { m_clrBkg		= Color(nA, nR, nG, nB); Invalidate(); }
 	void SetColorBorder		(int nA, int nR, int nG, int nB) { m_clrBorder	= Color(nA, nR, nG, nB); Invalidate(); }
@@ -56,11 +57,22 @@ public :
 	void SetAlignTextCB() { m_nTextAlign1 = 1; m_nTextAlign2 = 2; Invalidate(); }
 	void SetAlignTextRB() { m_nTextAlign1 = 2; m_nTextAlign2 = 2; Invalidate(); }
 
+	//-------------------- Scrollbar Control --------------------//
+	void SetSBColorChannel(int nA, int nR, int nG, int nB) { m_pwndSBV->SetColorChannel(nA,nR,nG,nB); }
+	void SetSBColorThumb(int nNomA, int nNomR, int nNomG, int nNomB, int nHiA, int nHiR, int nHiG, int nHiB) { 
+		m_pwndSBV->SetColorThumb(nNomA, nNomR, nNomG, nNomB, nHiA, nHiR, nHiG, nHiB); }
+	void SetSBColorArrow(int nNomA, int nNomR, int nNomG, int nNomB, int nHiA, int nHiR, int nHiG, int nHiB) { 
+		m_pwndSBV->SetColorArrow(nNomA, nNomR, nNomG, nNomB, nHiA, nHiR, nHiG, nHiB); }
+	void SetSBColorArrowBox(int nNomA, int nNomR, int nNomG, int nNomB, int nHiA, int nHiR, int nHiG, int nHiB) { 
+		m_pwndSBV->SetColorArrowBox(nNomA, nNomR, nNomG, nNomB, nHiA, nHiR, nHiG, nHiB); }
+
 private :
 	void DrawBorder(Graphics *pG, CRect rcRect);
 	void DrawItem(Graphics *pG, CRect rcItem, Color clrItem);
 	void DrawText(Graphics *pG, CRect rcItem, CString strText, Color clrText);
 
+	CScrollBarEx* m_pwndSBV;
+	CRect	m_rcSBV;
 	bool	m_bModeOneColor;
 	int		m_nOffsetTextX;
 	int		m_nOffsetTextY;
@@ -84,4 +96,6 @@ public:
 	virtual void MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct);
 	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
+	afx_msg void OnSize(UINT nType, int cx, int cy);
+	afx_msg void OnDestroy();
 };

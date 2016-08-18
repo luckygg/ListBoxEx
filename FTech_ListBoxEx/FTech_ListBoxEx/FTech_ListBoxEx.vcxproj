@@ -103,6 +103,7 @@
     <ClInclude Include="FTech_ListBoxExDlg.h" />
     <ClInclude Include="ListBoxEx.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="ScrollBarEx.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -110,6 +111,7 @@
     <ClCompile Include="FTech_ListBoxEx.cpp" />
     <ClCompile Include="FTech_ListBoxExDlg.cpp" />
     <ClCompile Include="ListBoxEx.cpp" />
+    <ClCompile Include="ScrollBarEx.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
