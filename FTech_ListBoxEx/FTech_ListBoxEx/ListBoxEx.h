@@ -5,6 +5,9 @@
 //----------------------------------------------------------
 // Programmed by William Kim
 //----------------------------------------------------------
+// Last Update : 2016-09-07 18:50
+// Modified by William Kim
+//----------------------------------------------------------
 
 #include "ScrollBarEx.h"
 // CListBoxEx
@@ -42,6 +45,13 @@ public :
 	void SetColorItemNomal	(int nA, int nR, int nG, int nB) { m_clrItemNom1 = Color(nA, nR, nG, nB); m_bModeOneColor = true; Invalidate(); }
 	void SetColorItemNomal	(int nA1, int nR1, int nG1, int nB1, int nA2, int nR2, int nG2, int nB2) { 
 		m_clrItemNom1 = Color(nA1, nR1, nG1, nB1); m_clrItemNom2 = Color(nA2, nR2, nG2, nB2); m_bModeOneColor = false; Invalidate(); }
+	void SetColorBkg		(int nA, COLORREF clrColor);
+	void SetColorBorder		(int nA, COLORREF clrColor);
+	void SetColorTextHot	(int nA, COLORREF clrColor);
+	void SetColorTextNormal	(int nA, COLORREF clrColor);
+	void SetColorItemHot	(int nA, COLORREF clrColor);
+	void SetColorItemNomal	(int nA, COLORREF clrColor);
+	void SetColorItemNomal	(int nA1, COLORREF clrColor1, int nA2, COLORREF clrColor2);
 
 	//----- Set Offset -----//
 	void SetOffsetText	(int nX, int nY) { m_nOffsetTextX = nX; m_nOffsetTextY = nY; Invalidate(); }

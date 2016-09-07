@@ -272,3 +272,78 @@ void CListBoxEx::OnDestroy()
 		m_pwndSBV = NULL;
 	}
 }
+
+void CListBoxEx::SetColorBkg(int nA, COLORREF clrColor)
+{
+	int r = GetRValue(clrColor);
+	int g = GetGValue(clrColor);
+	int b = GetBValue(clrColor);
+
+	m_clrBkg = Color(nA, r, g, b); 
+	Invalidate();
+}
+
+void CListBoxEx::SetColorBorder(int nA, COLORREF clrColor)
+{
+	int r = GetRValue(clrColor);
+	int g = GetGValue(clrColor);
+	int b = GetBValue(clrColor);
+
+	m_clrBorder = Color(nA, r, g, b); 
+	Invalidate();
+}
+
+void CListBoxEx::SetColorTextHot(int nA, COLORREF clrColor)
+{
+	int r = GetRValue(clrColor);
+	int g = GetGValue(clrColor);
+	int b = GetBValue(clrColor);
+
+	m_clrTextHot = Color(nA, r, g, b); 
+	Invalidate();
+}
+
+void CListBoxEx::SetColorTextNormal(int nA, COLORREF clrColor)
+{
+	int r = GetRValue(clrColor);
+	int g = GetGValue(clrColor);
+	int b = GetBValue(clrColor);
+
+	m_clrTextNom = Color(nA, r, g, b); 
+	Invalidate();
+}
+
+void CListBoxEx::SetColorItemHot(int nA, COLORREF clrColor)
+{
+	int r = GetRValue(clrColor);
+	int g = GetGValue(clrColor);
+	int b = GetBValue(clrColor);
+
+	m_clrItemHot = Color(nA, r, g, b); 
+	Invalidate();
+}
+
+void CListBoxEx::SetColorItemNomal(int nA, COLORREF clrColor)
+{
+	int r = GetRValue(clrColor);
+	int g = GetGValue(clrColor);
+	int b = GetBValue(clrColor);
+
+	m_clrItemNom1 = Color(nA, r, g, b); 
+	Invalidate();
+}
+
+void CListBoxEx::SetColorItemNomal(int nA1, COLORREF clrColor1, int nA2, COLORREF clrColor2)
+{
+	int r1 = GetRValue(clrColor1);
+	int g1 = GetGValue(clrColor1);
+	int b1 = GetBValue(clrColor1);
+
+	int r2 = GetRValue(clrColor2);
+	int g2 = GetGValue(clrColor2);
+	int b2 = GetBValue(clrColor2);
+
+	m_clrItemNom1 = Color(nA1, r1, g1, b1); 
+	m_clrItemNom2 = Color(nA2, r2, g2, b2); 
+	Invalidate();
+}
