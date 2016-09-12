@@ -5,7 +5,7 @@
 //----------------------------------------------------------
 // Programmed by William Kim
 //----------------------------------------------------------
-// Last Update : 2016-09-12 17:17
+// Last Update : 2016-09-12 17:22
 // Modified by William Kim
 //----------------------------------------------------------
 
@@ -21,6 +21,7 @@ public:
 	virtual ~CListBoxEx();
 
 public :
+	void SetEnable(bool bEnable) { m_bEnable = bEnable; EnableWindow(m_bEnable); Invalidate(); }
 
 	//----- Dynamic Create Control -----//
 	BOOL CreateContol(CWnd* pWnd, CRect rcSize, UINT ID);
@@ -84,6 +85,7 @@ private :
 	CScrollBarEx* m_pwndSBV;
 	CRect	m_rcSBV;
 	bool	m_bModeOneColor;
+	bool	m_bEnable;
 	int		m_nOffsetTextX;
 	int		m_nOffsetTextY;
 	int		m_nTextAlign1;
