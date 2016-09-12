@@ -107,7 +107,10 @@ int CListBoxEx::AddString(CString strItem)
 	else
 		m_pwndSBV->ShowWindow(SW_HIDE);
 
-	m_pwndSBV->SetScrollPos(0);
+	//m_pwndSBV->SetScrollPos(0);
+	m_pwndSBV->SetScrollPos(cntItem);
+	SetCurSel(cntItem);
+
 	return cntItem;
 }
 
