@@ -65,6 +65,7 @@ BOOL CListBoxEx::CreateContol(CWnd* pWnd, CRect rcSize, UINT ID)
 
 	m_pwndSBV = new CScrollBarEx();
 	m_pwndSBV->CreateContol(this,false,m_rcSBV,WM_USER);
+	m_pwndSBV->ShowWindow(SW_HIDE);
 
 	return ret;
 }
@@ -89,6 +90,7 @@ BOOL CListBoxEx::InitControl(CWnd* pWnd)
 
 	m_pwndSBV = new CScrollBarEx();
 	m_pwndSBV->CreateContol(this,false,m_rcSBV,WM_USER);
+	m_pwndSBV->ShowWindow(SW_HIDE);
 
 	return ret;
 }
