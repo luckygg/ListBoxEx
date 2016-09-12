@@ -83,7 +83,7 @@ BOOL CListBoxEx::InitControl(CWnd* pWnd)
 	if (ret == FALSE) return false;
 
 	//ret = Create(WS_CHILD|WS_VISIBLE|WS_TABSTOP|WS_VSCROLL|LBS_OWNERDRAWVARIABLE|LBS_HASSTRINGS, rect, pWnd, id );
-	ret = Create(WS_CHILD|WS_VISIBLE|WS_TABSTOP|LBS_OWNERDRAWVARIABLE|LBS_HASSTRINGS, rect, pWnd, id );
+	ret = Create(WS_CHILD|WS_VISIBLE|WS_TABSTOP|LBS_OWNERDRAWVARIABLE|LBS_HASSTRINGS|LBS_NOTIFY, rect, pWnd, id );
 
 	m_rcSBV = CRect(rect.Width()-20,0,rect.Width(),rect.Height());
 	//m_rcSBV = CRect(rect.right-31,0,rect.right-11,rect.Height());

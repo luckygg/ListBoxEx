@@ -35,6 +35,7 @@ BEGIN_MESSAGE_MAP(CFTech_ListBoxExDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BtnAdd, &CFTech_ListBoxExDlg::OnBnClickedBtnadd)
 	ON_WM_DESTROY()
+	ON_CONTROL(LBN_SELCHANGE,IDC_LIST1,&CFTech_ListBoxExDlg::OnClickedListBox)
 END_MESSAGE_MAP()
 
 
@@ -141,4 +142,14 @@ void CFTech_ListBoxExDlg::OnDestroy()
 		delete m_plbTest;
 		m_plbTest = NULL;
 	}
+}
+
+void CFTech_ListBoxExDlg::OnClickedListBox()
+{
+	CString text=L"";
+	int pos = m_lbTest.GetCurSel();
+	
+	m_lbTest.GetText(pos,text);
+
+	AfxMessageBox(text);
 }

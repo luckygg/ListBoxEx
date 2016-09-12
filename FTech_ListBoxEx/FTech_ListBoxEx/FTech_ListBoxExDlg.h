@@ -34,4 +34,5 @@ public:
 	CListBoxEx* m_plbTest;
 	afx_msg void OnBnClickedBtnadd();
 	afx_msg void OnDestroy();
+	afx_msg void OnClickedListBox();
 };
